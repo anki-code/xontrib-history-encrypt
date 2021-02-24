@@ -9,7 +9,7 @@ except (IOError, OSError):
 
 setuptools.setup(
     name='xontrib-history-encrypt',
-    version='0.0.1',
+    version='0.0.2',
     license='MIT',
     author='anki-code',
     author_email='no@no.no',
