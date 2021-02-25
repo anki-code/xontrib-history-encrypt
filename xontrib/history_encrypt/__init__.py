@@ -20,7 +20,11 @@ class XontribHistoryEncrypt(History):
             self.enc = encryptor['enc']
             self.dec = encryptor['dec']
         elif type(encryptor) is str:
-            if encryptor == 'base64':
+            if encryptor == 'disabled':
+                self.key = None
+                self.enc = lambda data, key=None: data
+                self.dec = lambda data, key=None: data
+            elif encryptor == 'base64':
                 from xontrib.history_encrypt.base64 import base64_encode, base64_decode
                 self.key = None
                 self.enc = lambda data, key=None: base64_encode(data.encode()).decode()
