@@ -1,7 +1,6 @@
 import os
 import uuid
 import builtins
-from base64 import b64decode, b64encode
 
 try:
     import ujson as json
@@ -10,17 +9,10 @@ except ImportError:
 
 from xonsh.history.base import History
 
-_crypters = {
-    'base64': {
-        'key': None,
-        'enc': lambda data, key=None: b64encode(data.encode()).decode(),
-        'dec': lambda data, key=None: b64decode(data).decode()
-    }
-}
-
 class XontribHistoryEncrypt(History):
 
     def __init__(self, filename=None, sessionid=None, **kwargs):
+        self.lock = False
 
         encryptor = __xonsh__.env.get('XONSH_HISTORY_ENCRYPTOR', 'base64')
         if type(encryptor) is dict:
@@ -28,13 +20,26 @@ class XontribHistoryEncrypt(History):
             self.enc = encryptor['enc']
             self.dec = encryptor['dec']
         elif type(encryptor) is str:
-            self.key = _crypters[encryptor]['key']
-            self.enc = _crypters[encryptor]['enc']
-            self.dec = _crypters[encryptor]['dec']
+            if encryptor == 'base64':
+                from xontrib.history_encrypt.base64 import base64_encode, base64_decode
+                self.key = None
+                self.enc = lambda data, key=None: base64_encode(data.encode()).decode()
+                self.dec = lambda data, key=None: base64_decode(data.encode()).decode()
+            elif encryptor == 'fernet':
+                from xontrib.history_encrypt.fernet import fernet_key, fernet_encrypt, fernet_decrypt
+                self.key = fernet_key
+                self.enc = lambda data, key: fernet_encrypt(data.encode(), key).decode()
+                self.dec = lambda data, key: fernet_decrypt(data.encode(), key).decode()
+            else:
+                printx(f"{{RED}}[xontrib-history-encrypt] Wrong encryptor name '{encryptor}'! History will not be loaded and saved.{{RESET}}")
+                self.lock = True
+        else:
+            printx('{RED}[xontrib-history-encrypt] Wrong encryptor type! History will not be loaded and saved.{RESET}')
+            self.lock = True
 
-        self.key = self.key() if callable(self.key) else self.key
+        if not self.lock:
+            self.key = self.key() if callable(self.key) else self.key
 
-        self.lock = False
         self.sessionid = uuid.uuid4() if sessionid is None else sessionid
         self.buffer = []
         self.gc = None
@@ -61,6 +66,9 @@ class XontribHistoryEncrypt(History):
         self.buffer.append(data)
 
     def items(self, newest_first=False):
+        if self.lock:
+            return []
+
         if os.path.exists(self.filename):
             data = []
             first_line = True

@@ -16,52 +16,36 @@ xpip install xontrib-history-encrypt
 # or: xpip install -U git+https://github.com/anki-code/xontrib-history-encrypt
 ```
 
-## Usage
+## Usage: supported encryption
 
-```bash
-xontrib load history_encrypt
-# Now your commands will be managed by xontrib-history-encrypt.
+### Base64 (default)
 
-history info
-# backend: xontrib-history-encrypt
-# sessionid: 374eedc9-fc94-4d27-9ab7-ebd5a5c87d12
-# filename: /home/user/.local/share/xonsh/xonsh-history-encrypt.txt
-# commands: 1
-```
-
-## Supported encryption
-
-You can set the encryption type before loading the xontrib:
-
-* `$XONSH_HISTORY_ENCRYPTOR = 'base64'` (default) - command's text encoding but without encryption. 
-  It can save from the massive scanning the file system for keywords (i.e. password, key) as well as reading the history file by not experienced user. 
-  And yes, it can be decoded in five minutes.
-
-To more strong encryption use custom encryption like in the demo below.
-
-## Custom encryption demo 
-
-Here is the implementation of [Fernet](https://cryptography.io/en/latest/fernet.html) (AES CBC + HMAC) that was strongly 
-recommended on [stackoverflow](https://stackoverflow.com/a/55147077). It will be the part of this xontrib in the future.
-
-Add this to the RC file i.e. `/tmp/rc`:
+Base64 is not the real encrypter and implemented as fast way to encode history file and for education reasons.
+It can save you from the massive scanning the file system for keywords (i.e. password, key) 
+as well as reading the history file by not experienced user. But it can be decoded in five minutes by the professional.
 
 ```python
-from cryptography.fernet import Fernet
+# Add to xonsh RC file
+$XONSH_HISTORY_ENCRYPTOR = 'base64'
+xontrib load history_encrypt
+```
 
-def fernet_key():
-    print('[xontrib-history-encrypt] Enter the key or press enter to create new: ', end='')
-    key = input()
-    if not key.strip():
-      key = Fernet.generate_key()
-      print('[xontrib-history-encrypt] Save the key and use it next time: ', key.decode())
-    return key 
+### Fernet 
 
-def fernet_encrypt(message: bytes, key: bytes) -> bytes:
-    return Fernet(key).encrypt(message)
+The implementation of [Fernet](https://cryptography.io/en/latest/fernet.html) (AES CBC + HMAC) that was strongly 
+recommended on [stackoverflow](https://stackoverflow.com/a/55147077). On first start it generates a key that you 
+should save in secure place. Than you can use this key to decrypt the history.
 
-def fernet_decrypt(token: bytes, key: bytes) -> bytes:
-    return Fernet(key).decrypt(token)
+```python
+# Add to xonsh RC file
+$XONSH_HISTORY_ENCRYPTOR = 'fernet'
+xontrib load history_encrypt
+```
+
+### Custom 
+
+```python
+from xontrib.history_encrypt.fernet import *
 
 $XONSH_HISTORY_ENCRYPTOR = {
   'key': fernet_key,
@@ -70,29 +54,28 @@ $XONSH_HISTORY_ENCRYPTOR = {
 }
 xontrib load history_encrypt
 ```
-Then run the xonsh shell:
-```python
-bash
-xonsh --rc /tmp/rc
-# [xontrib-history-encrypt] Enter the key or press enter to create new: <Enter>
-# [xontrib-history-encrypt] Save the key and use it next time: q_eaCZ01bt_9lUQPZIhE6WvOeKUq0S2L4A7crxCZrCU=
-echo 1
-# 1
-echo 2
-# 2
-exit
 
-xonsh --rc /tmp/rc
-# [xontrib-history-encrypt] Enter the key or press enter to create new: q_eaCZ01bt_9lUQPZIhE6WvOeKUq0S2L4A7crxCZrCU=
-# History loaded!
+## What should I know?
+
+### How to check the backend is working
+
+```bash
+history info
+# backend: xontrib-history-encrypt
+# sessionid: 374eedc9-fc94-4d27-9ab7-ebd5a5c87d12
+# filename: /home/user/.local/share/xonsh/xonsh-history-encrypt.txt
+# commands: 1
 ```
 
-## Known issues
+### Some points about the backend
 
-### The history will be not saved in case of xonsh crash
+* At start the backend read and decrypt all commands and this could take time. Basically we assume that you will use the xontrib on your servers and haven't so big history.
 
-The current implementation of history management is simple and when xonsh crash the history will be lost too. 
-Use `history flush` command to force writing to the disk before experiments.
+* The commands are stored in the memory and flush to the disk at the exit from the shell. If the shell has crash there is no flushing to the disk and commands will be lost. Use `history flush` command if you plan to run something experimental.
+
+* The backend has minimal history management support in comparing with json or sqlite backends and you can find the lack of features.
+
+If you want to improve something from the list PRs are welcome!
 
 ## Credits
 

@@ -9,7 +9,7 @@ except (IOError, OSError):
 
 setuptools.setup(
     name='xontrib-history-encrypt',
-    version='0.0.3',
+    version='0.0.4',
     license='MIT',
     author='anki-code',
     author_email='no@no.no',
@@ -17,10 +17,10 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     python_requires='>=3.6',
-    install_requires=['xonsh', 'cryptography'],
-    packages=['xontrib'],
+    install_requires=['xonsh', 'cryptography', 'ujson'],
+    packages=['xontrib', 'xontrib.history_encrypt'],
     package_dir={'xontrib': 'xontrib'},
-    package_data={'xontrib': ['*.xsh']},
+    package_data={'xontrib': ['*.py']},
     platforms='any',
     url='https://github.com/anki-code/xontrib-history-encrypt',
     project_urls={
@@ -30,10 +30,10 @@ setuptools.setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Topic :: System :: Shells",
