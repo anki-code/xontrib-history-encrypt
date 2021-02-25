@@ -29,15 +29,63 @@ history info
 # commands: 1
 ```
 
-## Encryption type
+## Supported encryption
 
 You can set the encryption type before loading the xontrib:
 
-* `$XONSH_HISTORY_ENCRYPT_TYPE = 'base64'` (default) - command's text encoding but without encryption. 
+* `$XONSH_HISTORY_ENCRYPTOR = 'base64'` (default) - command's text encoding but without encryption. 
   It can save from the massive scanning the file system for keywords (i.e. password, key) as well as reading the history file by not experienced user. 
-  But it can be decoded in five minutes.
+  And yes, it can be decoded in five minutes.
 
-* More strong solutions are in the future. Feel free to help.
+To more strong encryption use custom encryption like in the demo below.
+
+## Custom encryption demo 
+
+Here is the implementation of [Fernet](https://cryptography.io/en/latest/fernet.html) (AES CBC + HMAC) that was strongly 
+recommended on [stackoverflow](https://stackoverflow.com/a/55147077). It will be the part of this xontrib in the future.
+
+Add this to the RC file i.e. `/tmp/rc`:
+
+```python
+from cryptography.fernet import Fernet
+
+def fernet_key():
+    print('[xontrib-history-encrypt] Enter the key or press enter to create new: ', end='')
+    key = input()
+    if not key.strip():
+      key = Fernet.generate_key()
+      print('[xontrib-history-encrypt] Save the key and use it next time: ', key.decode())
+    return key 
+
+def fernet_encrypt(message: bytes, key: bytes) -> bytes:
+    return Fernet(key).encrypt(message)
+
+def fernet_decrypt(token: bytes, key: bytes) -> bytes:
+    return Fernet(key).decrypt(token)
+
+$XONSH_HISTORY_ENCRYPTOR = {
+  'key': fernet_key,
+  'enc': lambda data, key: fernet_encrypt(data.encode(), key).decode(),
+  'dec': lambda data, key: fernet_decrypt(data.encode(), key).decode()  
+}
+xontrib load history_encrypt
+```
+Then run the xonsh shell:
+```python
+bash
+xonsh --rc /tmp/rc
+# [xontrib-history-encrypt] Enter the key or press enter to create new: <Enter>
+# [xontrib-history-encrypt] Save the key and use it next time: q_eaCZ01bt_9lUQPZIhE6WvOeKUq0S2L4A7crxCZrCU=
+echo 1
+# 1
+echo 2
+# 2
+exit
+
+xonsh --rc /tmp/rc
+# [xontrib-history-encrypt] Enter the key or press enter to create new: q_eaCZ01bt_9lUQPZIhE6WvOeKUq0S2L4A7crxCZrCU=
+# History loaded!
+```
 
 ## Known issues
 

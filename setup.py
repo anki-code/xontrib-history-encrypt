@@ -9,7 +9,7 @@ except (IOError, OSError):
 
 setuptools.setup(
     name='xontrib-history-encrypt',
-    version='0.0.2',
+    version='0.0.3',
     license='MIT',
     author='anki-code',
     author_email='no@no.no',
@@ -17,7 +17,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     python_requires='>=3.6',
-    install_requires=['xonsh'],
+    install_requires=['xonsh', 'cryptography'],
     packages=['xontrib'],
     package_dir={'xontrib': 'xontrib'},
     package_data={'xontrib': ['*.xsh']},

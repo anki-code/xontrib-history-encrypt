@@ -71,9 +71,9 @@ class XontribHistoryEncrypt(History):
                             crypt_mark = self.dec(line, self.key)
                             assert crypt_mark.isdigit()
                         except:
-                            printx("{YELLOW}The crypted history file is not matching with crypto algorithm.")
-                            printx(f"File: {self.filename}")
-                            printx(f"Change the encryption algorithm or (re)move the history file.{{RESET}}")
+                            printx("{YELLOW}The crypted history file is not matching with crypto algorithm or the key.{RESET}")
+                            printx(f"{{YELLOW}}Change the encryption algorithm or the key or remove the history file.{{RESET}}")
+                            printx(f"{{YELLOW}}History file: {self.filename}{{RESET}}")
                             printx(f"{{RED}}History has not loaded and will not be saved!{{RESET}}")
                             self.lock = True
                             return []
