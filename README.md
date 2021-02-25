@@ -1,5 +1,5 @@
 <p align="center">
-History backend that encrypt the xonsh shell commands history file<br> to prevent extracting sensitive data from the commands history <br>(keys, passwords, hosts, names).
+History backend that encrypt the xonsh shell commands history file<br> to prevent leaking sensitive data from the commands history <br>(keys, passwords, hosts, names).
 </p>
 
 <p align="center">  
@@ -33,18 +33,13 @@ history info
 
 You can set the encryption type before loading the xontrib:
 
-* `$XONSH_HISTORY_ENCRYPT_TYPE = 'base64'` (default) - command's text encoding but without encryption. It can save from 
-thoughtless full file system scanning for keywords (i.e. password, key) as well as the reading by not experienced user 
-who trying to read history file. 
+* `$XONSH_HISTORY_ENCRYPT_TYPE = 'base64'` (default) - command's text encoding but without encryption. 
+  It can save from the massive scanning the file system for keywords (i.e. password, key) as well as reading the history file by not experienced user. 
+  But it can be decoded in five minutes.
 
 * More strong solutions are in the future. Feel free to help.
 
 ## Known issues
-
-### Work in progress
-
-The xontrib now is in proof of concept stage and you can faced with speed issues or another. 
-Your thought and PRs are appreciated.
 
 ### The history will be not saved in case of xonsh crash
 
