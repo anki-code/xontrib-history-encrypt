@@ -107,6 +107,11 @@ class XontribHistoryEncrypt(History):
                 from datetime import datetime
                 file.write(self.enc(datetime.now().strftime("%Y%m%d%H%M%S"), self.key) + os.linesep)
 
+            try:
+                os.chmod(self.filename, 0o600)
+            except:
+                pass
+
         with open(self.filename, 'a') as file:
             for data in self.buffer:
                 if 'out' in data:
