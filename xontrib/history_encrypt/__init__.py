@@ -1,4 +1,5 @@
 import os
+import sys
 import uuid
 import builtins
 
@@ -12,7 +13,16 @@ from xonsh.history.base import History
 class XontribHistoryEncrypt(History):
 
     def __init__(self, filename=None, sessionid=None, **kwargs):
+        self.debug = __xonsh__.env.get('XONSH_HISTORY_ENCRYPT_DEBUG', False)
         self.lock = False
+
+        self.tqdm = lambda a: a
+        if self.debug:
+            try:
+                from tqdm import tqdm
+                self.tqdm = tqdm
+            except:
+                pass
 
         encryptor = __xonsh__.env.get('XONSH_HISTORY_ENCRYPTOR', 'base64')
         if type(encryptor) is dict:
@@ -76,8 +86,9 @@ class XontribHistoryEncrypt(History):
         if os.path.exists(self.filename):
             data = []
             first_line = True
-            with open(self.filename, 'r') as file:
+            with self.tqdm(open(self.filename, 'r')) as file:
                 for line in file:
+                    line = line.rstrip()
                     if first_line:
                         try:
                             crypt_mark = self.dec(line, self.key)
@@ -109,7 +120,9 @@ class XontribHistoryEncrypt(History):
 
             try:
                 os.chmod(self.filename, 0o600)
-            except:
+            except Exception as e:
+                if self.debug:
+                    print(f'Exception while setting permissions to {self.filename}: {e}', file=sys.stderr)
                 pass
 
         with open(self.filename, 'a') as file:

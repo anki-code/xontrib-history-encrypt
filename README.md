@@ -45,12 +45,10 @@ xontrib load history_encrypt
 ### Custom 
 
 ```python
-from xontrib.history_encrypt.fernet import *
-
 $XONSH_HISTORY_ENCRYPTOR = {
-  'key': fernet_key,
-  'enc': lambda data, key: fernet_encrypt(data.encode(), key).decode(),
-  'dec': lambda data, key: fernet_decrypt(data.encode(), key).decode()  
+  'key': lambda: input('[xontrib-history-encrypt] Enter any key just for fun: '),
+  'enc': lambda data, key=None: data[::-1], # just flip the string
+  'dec': lambda data, key=None: data[::-1]  # flip the string back
 }
 xontrib load history_encrypt
 ```
