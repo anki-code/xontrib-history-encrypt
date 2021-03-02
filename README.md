@@ -75,6 +75,8 @@ $XONSH_HISTORY_ENCRYPTOR = {
 xontrib load history_encrypt
 ```
 
+After debugging you can add your encryptor to the `history_encrypt` directory of the xontrib by PR.
+
 ## What should I know?
 
 ### How to check the backend is working
