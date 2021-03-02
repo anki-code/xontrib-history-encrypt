@@ -143,4 +143,11 @@ class XontribHistoryEncrypt(History):
         return data
 
 
-__xonsh__.env['XONSH_HISTORY_BACKEND'] = XontribHistoryEncrypt
+
+encryptor = __xonsh__.env.get('XONSH_HISTORY_ENCRYPTOR', 'base64')
+
+if encryptor == 'dummy':
+    from xonsh.history.dummy import DummyHistory
+    __xonsh__.env['XONSH_HISTORY_BACKEND'] = DummyHistory
+else:
+    __xonsh__.env['XONSH_HISTORY_BACKEND'] = XontribHistoryEncrypt

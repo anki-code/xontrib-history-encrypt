@@ -42,6 +42,17 @@ $XONSH_HISTORY_ENCRYPTOR = 'fernet'
 xontrib load history_encrypt
 ```
 
+### Dummy
+
+The best encryption of the data when there is no the data. The dummy encryptor stores command only in the memory during 
+the session without saving it on the disk. After the end of the session the commands will be lost.
+
+```python
+# Add to xonsh RC file
+$XONSH_HISTORY_ENCRYPTOR = 'dummy'
+xontrib load history_encrypt
+```
+
 ### Custom 
 
 ```python
