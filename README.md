@@ -20,6 +20,8 @@ xpip install xontrib-history-encrypt
 
 ### Base64 (default)
 
+*Protection level: no protection.*
+
 Base64 is not the real encrypter and implemented as fast way to encode history file and for education reasons.
 It can save you from the massive scanning the file system for keywords (i.e. password, key) 
 as well as reading the history file by not experienced user. But it can be decoded in five minutes by the professional.
@@ -31,6 +33,8 @@ xontrib load history_encrypt
 ```
 
 ### Fernet 
+
+*Protection level: high.*
 
 The implementation of [Fernet](https://cryptography.io/en/latest/fernet.html) (AES CBC + HMAC) that was strongly 
 recommended on [stackoverflow](https://stackoverflow.com/a/55147077). On first start it generates a key that you 
@@ -44,6 +48,8 @@ xontrib load history_encrypt
 
 ### Dummy
 
+*Protection level: super high.*
+
 The best encryption of the data when there is no the data. The dummy encryptor stores command only in the memory during 
 the session without saving it on the disk. After the end of the session the commands will be lost.
 
@@ -54,6 +60,10 @@ xontrib load history_encrypt
 ```
 
 ### Custom 
+
+*Protection level: all in your hands.*
+
+To create custom encryptor you should implement three functions: key getter function, encryptor and decryptor.
 
 ```python
 $XONSH_HISTORY_ENCRYPTOR = {
