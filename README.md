@@ -66,6 +66,7 @@ xontrib load history_encrypt
 To create custom encryptor you should implement three functions: key getter function, encryptor and decryptor.
 
 ```python
+# Add to xonsh RC file
 $XONSH_HISTORY_ENCRYPTOR = {
   'key': lambda: input('[xontrib-history-encrypt] Enter any key just for fun: '),
   'enc': lambda data, key=None: data[::-1], # just flip the string
