@@ -5,7 +5,7 @@ def fernet_key():
     key = input()
     if not key.strip():
       key = Fernet.generate_key()
-      print('[xontrib-history-encrypt] Save the key and use it next time: ', key.decode())
+      print('[xontrib-history-encrypt] Save the key and use it next time:', key.decode())
     return key
 
 def fernet_encrypt(message: bytes, key: bytes) -> bytes:
