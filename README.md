@@ -89,13 +89,13 @@ After debugging you can add your encryptor to the `history_encrypt` directory of
 3. Run xonsh with RC-file then get the key and remember the key:
     ```python
     xonsh --rc ~/.local/share/xonsh/rc
-    # [xontrib-history-encrypt] Enter the key or press enter to create new: <PRESS ENTER>
-    # [xontrib-history-encrypt] Save the key and use it next time: CFB5kAfD3BgdpQHJxmKb
+    # Enter the key or press enter to create new: <PRESS ENTER>
+    # Save the key and use it next time: CFB5kAfD3BgdpQHJxmKb
     ```
 4. Next time run xonsh with RC and key:
     ```python
     xonsh --rc ~/.local/share/xonsh/rc
-    # [xontrib-history-encrypt] Enter the key or press enter to create new: CFB5kAfD3BgdpQHJxmKb
+    # Enter the key or press enter to create new: CFB5kAfD3BgdpQHJxmKb
     ```
 
 ## What should I know?
