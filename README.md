@@ -77,6 +77,27 @@ xontrib load history_encrypt
 
 After debugging you can add your encryptor to the `history_encrypt` directory of the xontrib by PR.
 
+## Common use case
+
+1. You're on the public/shared/opened server where you have xonsh and bash.
+2. Install the xontrib and create your RC-file from bash:
+    ```python
+    pip install xontrib-history-encrypt
+    mkdir -p ~/.local/share/xonsh/
+    echo -e '$XONSH_HISTORY_ENCRYPTOR = "fernet"\nxontrib load history_encrypt' > ~/.local/share/xonsh/rc
+    ```
+3. Run xonsh with RC-file then get the key and remember the key:
+    ```python
+    xonsh --rc ~/.local/share/xonsh/rc
+    # [xontrib-history-encrypt] Enter the key or press enter to create new: <PRESS ENTER>
+    # [xontrib-history-encrypt] Save the key and use it next time: CFB5kAfD3BgdpQHJxmKb
+    ```
+4. Next time run xonsh with RC and key:
+    ```python
+    xonsh --rc ~/.local/share/xonsh/rc
+    # [xontrib-history-encrypt] Enter the key or press enter to create new: CFB5kAfD3BgdpQHJxmKb
+    ```
+
 ## What should I know?
 
 ### How to check the backend is working
