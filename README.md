@@ -1,5 +1,5 @@
 <p align="center">
-History backend that encrypt the xonsh shell commands history file<br> to prevent leaking sensitive data from the commands history <br>(keys, passwords, hosts, names).
+The xonsh shell history backend that encrypt the commands history file to prevent leaking sensitive data. 
 </p>
 
 <p align="center">  
