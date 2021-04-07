@@ -3,7 +3,7 @@ The xonsh shell history backend that encrypt the commands history file<br> to pr
 </p>
 
 <p align="center">  
-If you like the idea click ⭐ on the repo and <a href="https://twitter.com/intent/tweet?text=History%20backend%20for%20xonsh%20shell%20that%20encrypt%20the%20history.&url=https://github.com/anki-code/xontrib-history-encrypt" target="_blank">tweet now</a>.
+If you like the idea click ⭐ on the repo and <a href="https://twitter.com/intent/tweet?text=History%20backend%20for%20xonsh%20shell%20that%20encrypt%20the%20history.&url=https://github.com/anki-code/xontrib-history-encrypt" target="_blank">tweet</a>.
 </p>
 
 
