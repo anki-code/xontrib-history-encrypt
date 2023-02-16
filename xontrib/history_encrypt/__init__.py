@@ -1,3 +1,5 @@
+"""The xonsh shell history backend that encrypt the commands history file to prevent leaking sensitive data. """
+
 import os
 import sys
 import uuid
